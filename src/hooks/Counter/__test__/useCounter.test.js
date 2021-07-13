@@ -1,8 +1,19 @@
 import React from "react";
 import { useCounter } from "../useCounter";
 import { renderHook, act } from "@testing-library/react-hooks";
+import makeServer from "../../../server";
 
 const setup = () => renderHook(() => useCounter());
+
+describe("miragejs", () => {
+  it("test the connection to the server", async () => {
+    const server = makeServer();
+    const { result, waitForNextUpdate } = setup();
+    await waitForNextUpdate();
+    expect(result.current.test).not.toBe(undefined);
+    server.shutdown();
+  });
+});
 
 describe("increment", () => {
   it("increments the counter value by 1 from the hook", () => {
